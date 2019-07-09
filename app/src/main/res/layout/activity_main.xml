@@ -6,6 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <Button
+        android:id="@+id/SignUp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:cursorVisible="false"
+        android:text="Sign Up"
+        app:layout_constraintTop_toBottomOf="@+id/btnLogIn" />
+
     <EditText
         android:id="@+id/etUsername"
         android:layout_width="match_parent"
@@ -32,6 +41,7 @@
         android:layout_marginTop="32dp"
         android:cursorVisible="false"
         android:text="Log In"
-        app:layout_constraintTop_toBottomOf="@+id/etPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/etPassword"
+        tools:layout_editor_absoluteX="0dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

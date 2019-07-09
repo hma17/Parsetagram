@@ -1,44 +1,42 @@
 package com.example.parsetagram;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.parsetagram.model.Post;
 import com.parse.FindCallback;
+import com.parse.LogOutCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private static final String imagePath = "";
-    private EditText descriptionInput;
-    private Button createButton;
-    private Button refreshButton;
-
+    private Button LogOutbtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        descriptionInput = findViewById(R.id.description_et);
-        createButton = findViewById(R.id.create_btn);
-        refreshButton = findViewById(R.id.refresh_btn);
-
         loadTopPosts();
 
+        LogOutbtn = (Button)findViewById(R.id.btnLogOut);
+        LogOutbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                logOut();
+            }
+
+        });
     }
 
-    private void createPost(String description, ParseFile imageFile, ParseUser user) {
-        //TODO - create and save post
-    }
 
     private void loadTopPosts() {
         final Post.Query postsQuery = new Post.Query();
@@ -59,4 +57,27 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    private void logOut() {
+        ParseUser.logOut();
+        ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
+        ParseUser.logOutInBackground(new LogOutCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.d("LoginActivity", "Login Successful!");
+                    final Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Log.e("LoginActivity", "Login failure");
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+
+
 }
