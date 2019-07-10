@@ -21,6 +21,7 @@ import com.example.parsetagram.model.Post;
 import com.parse.FindCallback;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -66,7 +67,12 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String description = etDescription.getText().toString();
                 ParseUser user = ParseUser.getCurrentUser();
-                savePost(description, user);
+                if (photoFile == null || ivPreview.getDrawable() == null) {
+                    Log.e(TAG, "No photo to submit");
+                    Toast.makeText(HomeActivity.this,"There is no photo!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                savePost(description, user, photoFile);
             }
         });
 
@@ -172,21 +178,22 @@ public class HomeActivity extends AppCompatActivity {
             }
         }
     }
-    private void savePost(String description, ParseUser parseUser) {
+    private void savePost(String description, ParseUser parseUser, File photoFile) {
         Post post = new Post();
         post.setDescription(description);
         post.setUser(parseUser);
-        //post.setImage();
+        post.setImage(new ParseFile(photoFile));
         post.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                if (e!=null) {
+                if (e != null) {
                     Log.d(TAG, "Error while saving");
                     e.printStackTrace();
                     return;
                 }
                 Log.d(TAG, "Success!!");
                 etDescription.setText("");
+                ivPreview.setImageResource(0);
             }
         });
     }
