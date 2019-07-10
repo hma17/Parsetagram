@@ -21,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
     private Button btnLogIn;
     private Button btnSignIn;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         btnLogIn = (Button) findViewById(R.id.btnLogIn);
         btnSignIn = (Button) findViewById(R.id.SignUp);
 
+
         btnLogIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -40,6 +43,12 @@ public class MainActivity extends AppCompatActivity {
                 login(username, password);
             }
         });
+
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if (currentUser != null) {
+            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+            startActivity(intent);
+        }
 
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,10 +74,11 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
+
     }
 
+
         private void login (String username, String password){
-            ParseUser currentUser = ParseUser.getCurrentUser();
             ParseUser.logInInBackground(username, password, new LogInCallback() {
                 @Override
                 public void done(ParseUser user, ParseException e) {
@@ -84,5 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+
+
 
 }

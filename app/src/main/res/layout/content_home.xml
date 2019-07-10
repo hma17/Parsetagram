@@ -14,32 +14,51 @@
         android:layout_height="wrap_content"
         android:hint="enter a description"
         android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@id/create_btn"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintBottom_toTopOf="@id/submit_btn"
+        app:layout_constraintTop_toBottomOf="@id/btnTakePicture"
+        app:layout_constraintVertical_bias="0.93"
+        tools:layout_editor_absoluteX="0dp" />
 
 
     <Button
-        android:id="@+id/create_btn"
+        android:id="@+id/submit_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Create"
-        app:layout_constraintBottom_toTopOf="@id/refresh_btn"/>
-
-    <Button
-        android:id="@+id/refresh_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:text="Refresh"
-        />
+        android:layout_marginTop="32dp"
+        android:text="Submit"
+        app:layout_constraintTop_toBottomOf="@id/description_et"
+        tools:layout_editor_absoluteX="0dp" />
 
     <Button
         android:id="@+id/btnLogOut"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Log Out"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivPreview"
+        android:layout_width="334dp"
+        android:layout_height="309dp"
+        android:layout_marginStart="38dp"
+        android:layout_marginLeft="38dp"
+        android:layout_marginEnd="38dp"
+        android:layout_marginRight="38dp"
+        app:layout_constraintBottom_toTopOf="@id/description_et"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnLogOut"
+        app:layout_constraintVertical_bias="0.0"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <Button
+        android:id="@+id/btnTakePicture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Take Picture"
+        app:layout_constraintTop_toBottomOf="@+id/ivPreview"
+        app:layout_constraintBottom_toTopOf="@id/description_et"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
