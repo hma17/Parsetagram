@@ -1,8 +1,10 @@
-package com.example.parsetagram;
+package com.example.parsetagram.Fragments;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -17,6 +19,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import com.example.parsetagram.MainActivity;
+import com.example.parsetagram.R;
 import com.example.parsetagram.model.Post;
 import com.parse.FindCallback;
 import com.parse.LogOutCallback;
@@ -27,12 +31,13 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity {
+public class ComposeFragment extends AppCompatActivity {
 
     private Button LogOutbtn;
-    public final String TAG = "HomeActivity";
+    public final String TAG = "ComposeFragment";
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
     public String photoFileName = "photo.jpg";
     File photoFile;
@@ -46,7 +51,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-      //  loadTopPosts();
+
 
         LogOutbtn = (Button)findViewById(R.id.btnLogOut);
         LogOutbtn.setOnClickListener(new View.OnClickListener() {
@@ -69,7 +74,7 @@ public class HomeActivity extends AppCompatActivity {
                 ParseUser user = ParseUser.getCurrentUser();
                 if (photoFile == null || ivPreview.getDrawable() == null) {
                     Log.e(TAG, "No photo to submit");
-                    Toast.makeText(HomeActivity.this,"There is no photo!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ComposeFragment.this,"There is no photo!", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 savePost(description, user, photoFile);
@@ -87,26 +92,6 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
-    private void loadTopPosts() {
-        final Post.Query postsQuery = new Post.Query();
-        postsQuery.getTop().withUser();
-
-        postsQuery.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> objects, ParseException e) {
-                if (e==null) {
-                    for (int i =0; i<objects.size(); i++) {
-                        Log.d("HomeActivity", "Post[" + i +"] ="
-                                + objects.get(i).getDescription()
-                                + "\nusername = " + objects.get(i).getUser().getUsername());
-                    }
-                } else {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
 
     private void logOut() {
         ParseUser.logOut();
@@ -116,7 +101,7 @@ public class HomeActivity extends AppCompatActivity {
             public void done(ParseException e) {
                 if (e == null) {
                     Log.d("LoginActivity", "Login Successful!");
-                    final Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+                    final Intent intent = new Intent(ComposeFragment.this, MainActivity.class);
                     startActivity(intent);
                     finish();
                 } else {
@@ -135,7 +120,7 @@ public class HomeActivity extends AppCompatActivity {
         photoFile = getPhotoFileUri(photoFileName);
         // wrap File object into a content provider
         // required for API >= 24
-        Uri fileProvider = FileProvider.getUriForFile(HomeActivity.this, "com.codepath.fileprovider", photoFile);
+        Uri fileProvider = FileProvider.getUriForFile(ComposeFragment.this, "com.codepath.fileprovider", photoFile);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
 
         // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
@@ -198,7 +183,6 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-
     private void queryPosts() {
         final ParseQuery<Post> postQuery = new ParseQuery<Post>(Post.class);
         postQuery.include(Post.KEY_USER);
@@ -215,5 +199,33 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    //TODO-include rotate code in Activity Result method after creating Home Activity
+    public Bitmap rotateBitmapOrientation(String photoFilePath) {
+        BitmapFactory.Options bounds = new BitmapFactory.Options();
+        bounds.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(photoFilePath, bounds);
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        Bitmap bm = BitmapFactory.decodeFile(photoFilePath, opts);
+
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(photoFilePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String orientString = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
+        int orientation = orientString != null ? Integer.parseInt(orientString) : ExifInterface.ORIENTATION_NORMAL;
+        int rotationAngle = 0;
+        if (orientation == ExifInterface.ORIENTATION_ROTATE_90) rotationAngle = 90;
+        if (orientation == ExifInterface.ORIENTATION_ROTATE_180) rotationAngle = 180;
+        if (orientation == ExifInterface.ORIENTATION_ROTATE_270) rotationAngle = 270;
+
+        Matrix matrix = new Matrix();
+        matrix.setRotate(rotationAngle, (float) bm.getWidth() / 2, (float) bm.getHeight() / 2);
+        Bitmap rotatedBitmap = Bitmap.createBitmap(bm, 0, 0, bounds.outWidth, bounds.outHeight, matrix, true);
+
+        return rotatedBitmap;
     }
 }

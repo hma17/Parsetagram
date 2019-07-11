@@ -9,6 +9,7 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.parsetagram.Fragments.ComposeFragment;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
-            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+            Intent intent = new Intent(MainActivity.this, ComposeFragment.class);
             startActivity(intent);
         }
 
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                     public void done(ParseException e) {
                         if (e == null) {
                             Log.d("MainActivity", "Sign Up Worked!");
-                            final Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                            final Intent intent = new Intent(MainActivity.this, ComposeFragment.class);
                             startActivity(intent);
                             finish();
                         } else {
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 public void done(ParseUser user, ParseException e) {
                     if (e == null) {
                         Log.d("LoginActivity", "Login Successful!");
-                        final Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                        final Intent intent = new Intent(MainActivity.this, ComposeFragment.class);
                         startActivity(intent);
                         finish();
                     } else {
