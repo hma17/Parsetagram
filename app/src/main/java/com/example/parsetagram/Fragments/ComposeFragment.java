@@ -152,11 +152,11 @@ public class ComposeFragment extends Fragment {
                 File takenPhotoUri = getPhotoFileUri(photoFileName);
                 Bitmap rawTakenImage = BitmapFactory.decodeFile(takenPhotoUri.getPath());
 
-           //    Bitmap resizedBitmap = BitmapScaler.scaleToFitWidth(rawTakenImage, HomeActivity.screenWidth);
+                //    Bitmap resizedBitmap = BitmapScaler.scaleToFitWidth(rawTakenImage, HomeActivity.screenWidth);
 
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 
-              //  resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+                //  resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
 
                 try {
                     File resizedFile = getPhotoFileUri(photoFileName + "_resized");
@@ -174,7 +174,7 @@ public class ComposeFragment extends Fragment {
                 ivPreview.setImageBitmap(takenImage);
 
                 if (photoFile != null || ivPreview.getDrawable() != null) {
-               //     ivPreview.getLayoutParams().height = HomeActivity.screenWidth;
+                    //     ivPreview.getLayoutParams().height = HomeActivity.screenWidth;
                     btnTakePicture.setText("Replace Image");
                 } else {
                     ivPreview.getLayoutParams().height = 0;
@@ -235,4 +235,3 @@ public class ComposeFragment extends Fragment {
         return rotatedBitmap;
     }
 }
-

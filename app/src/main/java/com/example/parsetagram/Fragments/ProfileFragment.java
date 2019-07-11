@@ -1,39 +1,71 @@
 package com.example.parsetagram.Fragments;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 
-import com.example.parsetagram.model.Post;
-import com.parse.FindCallback;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.example.parsetagram.LogInActivity;
+import com.example.parsetagram.R;
+import com.parse.LogOutCallback;
 import com.parse.ParseException;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.util.List;
+public class ProfileFragment extends Fragment {
 
-public class ProfileFragment extends PostsFragment {
+
+    private Button LogOutbtn;
+
+
 
     @Override
-    protected void queryPosts() {
-        final ParseQuery<Post> postQuery = new ParseQuery<Post>(Post.class);
-        postQuery.include(Post.KEY_USER);
-        postQuery.setLimit(20);
-        postQuery.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
-        postQuery.addDescendingOrder(Post.KEY_CREATED_AT);
-        postQuery.findInBackground(new FindCallback<Post>() {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_profile, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
+
+        LogOutbtn = (Button) view.findViewById(R.id.btnLogOut);
+        LogOutbtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void done(List<Post> posts, ParseException e) {
-                if (e!=null) {
-                    Log.e(TAG, "error with query");
+            public void onClick(View view) {
+               logOut();
+            }
+
+        });
+
+
+    }
+
+
+    private void logOut() {
+        ParseUser.logOut();
+        ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
+        ParseUser.logOutInBackground(new LogOutCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.d("LoginActivity", "Login Successful!");
+                    final Intent intent = new Intent(getContext(), LogInActivity.class);
+                    startActivity(intent);
+                } else {
+                    Log.e("LoginActivity", "Login failure");
                     e.printStackTrace();
-                    return;
-                }
-                mPosts.addAll(posts);
-                adapter.notifyDataSetChanged();
-                for (int i=0; i<posts.size(); i++) {
-                    Log.d(TAG, "Posts: " + posts.get(i).getDescription() + " username: " + posts.get(i).getUser().getUsername());
                 }
             }
+
         });
     }
+
+
 }
 

@@ -33,7 +33,7 @@ public class PostsFragment extends Fragment {
     private RecyclerView rvPosts;
     protected PostsAdapter adapter;
     protected List<Post> mPosts;
-    //private Button LogOutbtn;
+
 
 
 
@@ -60,20 +60,11 @@ public class PostsFragment extends Fragment {
         rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
 
         loadTopPosts();
-        queryPosts();
+//        queryPosts();
 
         setupPullToRefresh();
 
-        /*
-        LogOutbtn = (Button) view.findViewById(R.id.btnLogOut);
-        LogOutbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               logOut();
-            }
 
-        });
-        */
     }
 
     private void setupPullToRefresh() {
@@ -145,24 +136,5 @@ public class PostsFragment extends Fragment {
         });
     }
 
-    /*
-    private void logOut() {
-        ParseUser.logOut();
-        ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
-        ParseUser.logOutInBackground(new LogOutCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    Log.d("LoginActivity", "Login Successful!");
-                    final Intent intent = new Intent(getContext(), LogInActivity.class);
-                    startActivity(intent);
-                    //finish();
-                } else {
-                    Log.e("LoginActivity", "Login failure");
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-    */
+
 }
