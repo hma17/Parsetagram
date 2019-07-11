@@ -30,7 +30,10 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import static android.app.Activity.RESULT_OK;
@@ -44,6 +47,7 @@ public class ComposeFragment extends Fragment {
     private EditText etDescription;
     private Button btnCaptureImage;
     private ImageView ivPreview;
+    private Button btnTakePicture;
 
 
 
@@ -74,6 +78,7 @@ public class ComposeFragment extends Fragment {
         btnCaptureImage = (Button)view.findViewById(R.id.btnTakePicture);
         ivPreview = (ImageView) view.findViewById(R.id.ivPreview);
 
+        btnTakePicture = (Button)view.findViewById(R.id.btnTakePicture);
         btnCaptureImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,8 +99,6 @@ public class ComposeFragment extends Fragment {
                 savePost(description, user, photoFile);
             }
         });
-
-
 
 
     }
@@ -142,11 +145,42 @@ public class ComposeFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
+
                 // by this point we have the camera photo on disk
-                Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-                // RESIZE BITMAP, see section below
-                // Load the taken image into a preview
+                Bitmap takenImage = rotateBitmapOrientation(photoFile.getAbsolutePath());
+
+                File takenPhotoUri = getPhotoFileUri(photoFileName);
+                Bitmap rawTakenImage = BitmapFactory.decodeFile(takenPhotoUri.getPath());
+
+           //    Bitmap resizedBitmap = BitmapScaler.scaleToFitWidth(rawTakenImage, HomeActivity.screenWidth);
+
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+
+              //  resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+
+                try {
+                    File resizedFile = getPhotoFileUri(photoFileName + "_resized");
+                    resizedFile.createNewFile();
+                    FileOutputStream fos = new FileOutputStream(resizedFile);
+
+                    fos.write(bytes.toByteArray());
+                    fos.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 ivPreview.setImageBitmap(takenImage);
+
+                if (photoFile != null || ivPreview.getDrawable() != null) {
+               //     ivPreview.getLayoutParams().height = HomeActivity.screenWidth;
+                    btnTakePicture.setText("Replace Image");
+                } else {
+                    ivPreview.getLayoutParams().height = 0;
+                    btnTakePicture.setText("Camera");
+                }
+
             } else { // Result was a failure
                 Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
