@@ -26,13 +26,6 @@
         app:layout_constraintTop_toBottomOf="@id/description_et"
         tools:layout_editor_absoluteX="0dp" />
 
-    <Button
-        android:id="@+id/btnLogOut"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Log Out"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/ivPreview"
@@ -57,5 +50,13 @@
         android:text="Take Picture"
         app:layout_constraintTop_toBottomOf="@+id/ivPreview"
         app:layout_constraintBottom_toTopOf="@id/description_et"/>
+
+    <Button
+        android:id="@+id/btnLogOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Log Out"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

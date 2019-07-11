@@ -23,10 +23,8 @@ import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
-import com.example.parsetagram.LogInActivity;
 import com.example.parsetagram.R;
 import com.example.parsetagram.model.Post;
-import com.parse.LogOutCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -47,7 +45,7 @@ public class ComposeFragment extends Fragment {
     private Button btnCaptureImage;
     private ImageView ivPreview;
 
-    private Button LogOutbtn;
+
 
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
     public String photoFileName = "photo.jpg";
@@ -97,35 +95,11 @@ public class ComposeFragment extends Fragment {
             }
         });
 
-        LogOutbtn = (Button) view.findViewById(R.id.btnLogOut);
-        LogOutbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                logOut();
-            }
 
-        });
 
 
     }
-    private void logOut() {
-        ParseUser.logOut();
-        ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
-        ParseUser.logOutInBackground(new LogOutCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    Log.d("LoginActivity", "Login Successful!");
-                    final Intent intent = new Intent(getContext(), LogInActivity.class);
-                    startActivity(intent);
-                  // TODO figure out what to do with -->  finish();
-                } else {
-                    Log.e("LoginActivity", "Login failure");
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
+
 
 
     public void onLaunchCamera() {

@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.parsetagram.Adapters.PostsAdapter;
 import com.example.parsetagram.R;
@@ -28,10 +29,12 @@ public class PostsFragment extends Fragment {
 
     public final static String TAG = "PostsFragment";
 
-    //private SwipeRefreshLayout swipeContainer;
+    private SwipeRefreshLayout swipeContainer;
     private RecyclerView rvPosts;
     protected PostsAdapter adapter;
     protected List<Post> mPosts;
+    //private Button LogOutbtn;
+
 
 
     // The onCreateView method is called when Fragment should create its View object hierarchy,
@@ -47,7 +50,7 @@ public class PostsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         rvPosts = view.findViewById(R.id.rvPosts);
-       //swipeContainer = view.findViewById(R.id.swipeContainer);
+        swipeContainer = view.findViewById(R.id.swipeContainer);
 
         mPosts = new ArrayList<>();
 
@@ -59,9 +62,20 @@ public class PostsFragment extends Fragment {
         loadTopPosts();
         queryPosts();
 
-       // setupPullToRefresh();
+        setupPullToRefresh();
+
+        /*
+        LogOutbtn = (Button) view.findViewById(R.id.btnLogOut);
+        LogOutbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               logOut();
+            }
+
+        });
+        */
     }
-/*
+
     private void setupPullToRefresh() {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -75,8 +89,7 @@ public class PostsFragment extends Fragment {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
     }
-    /
-    */
+
 
     private void loadTopPosts() {
         final Post.Query postsQuery = new Post.Query();
@@ -88,7 +101,7 @@ public class PostsFragment extends Fragment {
             @Override
             public void done(List<Post> objects, ParseException e) {
                 if (e == null) {
-                //    adapter.clear();
+                    adapter.clear();
 
                     mPosts.addAll(objects);
                     adapter.notifyDataSetChanged();
@@ -105,7 +118,7 @@ public class PostsFragment extends Fragment {
                     Toast.makeText(getContext(), "Error getting posts", Toast.LENGTH_SHORT).show();
                 }
 
-               // swipeContainer.setRefreshing(false);
+                swipeContainer.setRefreshing(false);
             }
         });
     }
@@ -131,4 +144,25 @@ public class PostsFragment extends Fragment {
             }
         });
     }
+
+    /*
+    private void logOut() {
+        ParseUser.logOut();
+        ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
+        ParseUser.logOutInBackground(new LogOutCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.d("LoginActivity", "Login Successful!");
+                    final Intent intent = new Intent(getContext(), LogInActivity.class);
+                    startActivity(intent);
+                    //finish();
+                } else {
+                    Log.e("LoginActivity", "Login failure");
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+    */
 }
