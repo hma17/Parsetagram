@@ -9,13 +9,12 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.parsetagram.Fragments.ComposeFragment;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
-public class MainActivity extends AppCompatActivity {
+public class LogInActivity extends AppCompatActivity {
 
     private EditText etUsername;
     private EditText etPassword;
@@ -27,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
 
         etUsername = (EditText) findViewById(R.id.etUsername);
         etPassword = (EditText) findViewById(R.id.etPassword);
@@ -47,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
-            Intent intent = new Intent(MainActivity.this, ComposeFragment.class);
+            Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
             startActivity(intent);
         }
 
@@ -64,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void done(ParseException e) {
                         if (e == null) {
-                            Log.d("MainActivity", "Sign Up Worked!");
-                            final Intent intent = new Intent(MainActivity.this, ComposeFragment.class);
+                            Log.d("LogInActivity", "Sign Up Worked!");
+                            final Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
                             startActivity(intent);
                             finish();
                         } else {
@@ -85,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 public void done(ParseUser user, ParseException e) {
                     if (e == null) {
                         Log.d("LoginActivity", "Login Successful!");
-                        final Intent intent = new Intent(MainActivity.this, ComposeFragment.class);
+                        final Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
                         startActivity(intent);
                         finish();
                     } else {

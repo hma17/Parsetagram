@@ -12,39 +12,42 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.parsetagram.Adapters.PostsAdapter;
 import com.example.parsetagram.R;
 import com.example.parsetagram.model.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class TimelineFragment extends Fragment {
+public class PostsFragment extends Fragment {
 
-    private final static String TAG = "TimelineFragment";
+    public final static String TAG = "PostsFragment";
 
-    private SwipeRefreshLayout swipeContainer;
+    //private SwipeRefreshLayout swipeContainer;
     private RecyclerView rvPosts;
-    private PostsAdapter adapter;
-    private List<Post> mPosts;
+    protected PostsAdapter adapter;
+    protected List<Post> mPosts;
 
+
+    // The onCreateView method is called when Fragment should create its View object hierarchy,
+    // either dynamically or via XML layout inflation.
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_timeline, container, false);
+        return inflater.inflate(R.layout.fragement_posts, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
 
-        rvPosts = view.findViewById(R.id.rvItems);
-        swipeContainer = view.findViewById(R.id.swipeContainer);
+        rvPosts = view.findViewById(R.id.rvPosts);
+       //swipeContainer = view.findViewById(R.id.swipeContainer);
 
         mPosts = new ArrayList<>();
 
@@ -54,10 +57,11 @@ public class TimelineFragment extends Fragment {
         rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
 
         loadTopPosts();
+        queryPosts();
 
-        setupPullToRefresh();
+       // setupPullToRefresh();
     }
-
+/*
     private void setupPullToRefresh() {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -71,6 +75,8 @@ public class TimelineFragment extends Fragment {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
     }
+    /
+    */
 
     private void loadTopPosts() {
         final Post.Query postsQuery = new Post.Query();
@@ -82,7 +88,7 @@ public class TimelineFragment extends Fragment {
             @Override
             public void done(List<Post> objects, ParseException e) {
                 if (e == null) {
-                    adapter.clear();
+                //    adapter.clear();
 
                     mPosts.addAll(objects);
                     adapter.notifyDataSetChanged();
@@ -99,7 +105,29 @@ public class TimelineFragment extends Fragment {
                     Toast.makeText(getContext(), "Error getting posts", Toast.LENGTH_SHORT).show();
                 }
 
-                swipeContainer.setRefreshing(false);
+               // swipeContainer.setRefreshing(false);
+            }
+        });
+    }
+
+    protected void queryPosts() {
+        final ParseQuery<Post> postQuery = new ParseQuery<Post>(Post.class);
+        postQuery.include(Post.KEY_USER);
+        postQuery.setLimit(20);
+        postQuery.addDescendingOrder(Post.KEY_CREATED_AT);
+        postQuery.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> posts, ParseException e) {
+                if (e!=null) {
+                    Log.e(TAG, "error with query");
+                    e.printStackTrace();
+                    return;
+                }
+                mPosts.addAll(posts);
+                adapter.notifyDataSetChanged();
+                for (int i=0; i<posts.size(); i++) {
+                    Log.d(TAG, "Posts: " + posts.get(i).getDescription() + " username: " + posts.get(i).getUser().getUsername());
+                }
             }
         });
     }

@@ -10,62 +10,78 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
 
-import com.example.parsetagram.MainActivity;
+import com.example.parsetagram.LogInActivity;
 import com.example.parsetagram.R;
 import com.example.parsetagram.model.Post;
-import com.parse.FindCallback;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
-public class ComposeFragment extends AppCompatActivity {
+import static android.app.Activity.RESULT_OK;
 
-    private Button LogOutbtn;
+
+public class ComposeFragment extends Fragment {
+
     public final String TAG = "ComposeFragment";
-    public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
-    public String photoFileName = "photo.jpg";
-    File photoFile;
+
     private Button btnSubmit;
     private EditText etDescription;
     private Button btnCaptureImage;
     private ImageView ivPreview;
 
+    private Button LogOutbtn;
+
+    public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
+    public String photoFileName = "photo.jpg";
+    File photoFile;
+
+
+
+    // The onCreateView method is called when Fragment should create its View object hierarchy,
+    // either dynamically or via XML layout inflation.
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_compose, container, false);
+    }
+
+    // This event is triggered soon after onCreateView().
+    // Any view setup should occur here.  E.g., view lookups and attaching view listeners.
 
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        btnSubmit = (Button)view.findViewById(R.id.submit_btn);
+        etDescription = (EditText)view.findViewById(R.id.description_et);
+        btnCaptureImage = (Button)view.findViewById(R.id.btnTakePicture);
+        ivPreview = (ImageView) view.findViewById(R.id.ivPreview);
 
-        LogOutbtn = (Button)findViewById(R.id.btnLogOut);
-        LogOutbtn.setOnClickListener(new View.OnClickListener() {
+        btnCaptureImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                logOut();
+                onLaunchCamera();
             }
-
         });
-        btnSubmit = (Button)findViewById(R.id.submit_btn);
-        etDescription = (EditText)findViewById(R.id.description_et);
-        btnCaptureImage = (Button)findViewById(R.id.btnTakePicture);
-        ivPreview = (ImageView) findViewById(R.id.ivPreview);
-
 
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,25 +90,24 @@ public class ComposeFragment extends AppCompatActivity {
                 ParseUser user = ParseUser.getCurrentUser();
                 if (photoFile == null || ivPreview.getDrawable() == null) {
                     Log.e(TAG, "No photo to submit");
-                    Toast.makeText(ComposeFragment.this,"There is no photo!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),"There is no photo!", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 savePost(description, user, photoFile);
             }
         });
 
-        btnCaptureImage.setOnClickListener(new View.OnClickListener() {
+        LogOutbtn = (Button) view.findViewById(R.id.btnLogOut);
+        LogOutbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onLaunchCamera();
+                logOut();
             }
+
         });
-       // queryPosts();
+
 
     }
-
-
-
     private void logOut() {
         ParseUser.logOut();
         ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
@@ -101,9 +116,9 @@ public class ComposeFragment extends AppCompatActivity {
             public void done(ParseException e) {
                 if (e == null) {
                     Log.d("LoginActivity", "Login Successful!");
-                    final Intent intent = new Intent(ComposeFragment.this, MainActivity.class);
+                    final Intent intent = new Intent(getContext(), LogInActivity.class);
                     startActivity(intent);
-                    finish();
+                  // TODO figure out what to do with -->  finish();
                 } else {
                     Log.e("LoginActivity", "Login failure");
                     e.printStackTrace();
@@ -120,12 +135,12 @@ public class ComposeFragment extends AppCompatActivity {
         photoFile = getPhotoFileUri(photoFileName);
         // wrap File object into a content provider
         // required for API >= 24
-        Uri fileProvider = FileProvider.getUriForFile(ComposeFragment.this, "com.codepath.fileprovider", photoFile);
+        Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.codepath.fileprovider", photoFile);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
 
         // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
         // So as long as the result is not null, it's safe to use the intent.
-        if (intent.resolveActivity(getPackageManager()) != null) {
+        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
             // Start the image capture intent to take photo
             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
         }
@@ -136,7 +151,7 @@ public class ComposeFragment extends AppCompatActivity {
         // Get safe storage directory for photos
         // Use `getExternalFilesDir` on Context to access package-specific directories.
         // This way, we don't need to request external read/write runtime permissions.
-        File mediaStorageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), TAG);
+        File mediaStorageDir = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), TAG);
 
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
@@ -159,7 +174,7 @@ public class ComposeFragment extends AppCompatActivity {
                 // Load the taken image into a preview
                 ivPreview.setImageBitmap(takenImage);
             } else { // Result was a failure
-                Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -183,23 +198,6 @@ public class ComposeFragment extends AppCompatActivity {
         });
     }
 
-    private void queryPosts() {
-        final ParseQuery<Post> postQuery = new ParseQuery<Post>(Post.class);
-        postQuery.include(Post.KEY_USER);
-        postQuery.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> posts, ParseException e) {
-                if (e!=null) {
-                    Log.e(TAG, "error with query");
-                    e.printStackTrace();
-                    return;
-                }
-                for (int i=0; i<posts.size(); i++) {
-                    Log.d(TAG, "Posts: " + posts.get(i).getDescription() + " username: " + posts.get(i).getUser().getUsername());
-                }
-            }
-        });
-    }
 
     //TODO-include rotate code in Activity Result method after creating Home Activity
     public Bitmap rotateBitmapOrientation(String photoFilePath) {
@@ -229,3 +227,4 @@ public class ComposeFragment extends AppCompatActivity {
         return rotatedBitmap;
     }
 }
+
