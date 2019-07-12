@@ -37,6 +37,7 @@ public class PostsFragment extends Fragment {
 
 
 
+
     // The onCreateView method is called when Fragment should create its View object hierarchy,
     // either dynamically or via XML layout inflation.
 

@@ -33,7 +33,6 @@
                     android:id="@+id/ivProfilePic"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
-
                     android:layout_marginTop="8dp"
                     android:src="@drawable/instagram_user_filled_24"
                     app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +41,6 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="211dp"
                     android:layout_height="107dp"
-
                     app:layout_constraintBottom_toBottomOf="@+id/ivProfilePic"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/ivProfilePic"
@@ -126,7 +124,9 @@
                     android:id="@+id/tvName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginTop="36dp"
                     android:text="Name"
                     android:textColor="#000000"
                     android:textSize="15sp"
@@ -134,27 +134,17 @@
                     app:layout_constraintStart_toStartOf="@+id/ivProfilePic"
                     app:layout_constraintTop_toBottomOf="@+id/ivProfilePic" />
 
-                <TextView
-                    android:id="@+id/tvBio"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="Bio"
-                    android:textColor="#000000"
-                    android:textSize="15sp"
-                    app:layout_constraintStart_toStartOf="@+id/tvName"
-                    app:layout_constraintTop_toBottomOf="@+id/tvName" />
-
                 <Button
                     android:id="@+id/btnEditProfile"
                     style="@style/Widget.AppCompat.Button"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="24dp"
                     android:text="Edit Profile"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/tvBio"
-                    app:layout_constraintTop_toBottomOf="@+id/tvBio" />
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@id/tvName"
+                    app:layout_constraintTop_toTopOf="@id/tvName" />
 
 
 
@@ -183,6 +173,18 @@
                     android:text="Log Out"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/btnSetProfilePic"
+                    android:layout_width="62dp"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginLeft="4dp"
+                    android:text="set"
+                    app:layout_constraintBottom_toTopOf="@id/tvName"
+                    app:layout_constraintStart_toStartOf="@id/ivProfilePic"
+                    app:layout_constraintTop_toBottomOf="@id/ivProfilePic"
+                    app:layout_constraintVertical_bias="1.0" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

@@ -6,29 +6,81 @@
     android:layout_margin="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <ImageView
+        android:id="@+id/ivDMpost"
+        android:layout_width="29dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        app:layout_constraintBottom_toTopOf="@id/tvDescription"
+        app:layout_constraintStart_toEndOf="@id/ivComment"
+        app:layout_constraintTop_toBottomOf="@id/ivImage"
+        app:srcCompat="@drawable/direct" />
+
+    <ImageView
+        android:id="@+id/ivComment"
+        android:layout_width="29dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        app:layout_constraintBottom_toTopOf="@id/tvDescription"
+        app:layout_constraintStart_toEndOf="@id/ivHeart"
+        app:layout_constraintTop_toBottomOf="@id/ivImage"
+        app:srcCompat="@drawable/ufi_comment" />
+
     <TextView
         android:id="@+id/tvHandle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="312dp"
+        android:layout_height="35dp"
         android:text="TextView"
         android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Title"
+        app:layout_constraintStart_toEndOf="@id/ivProfilePic"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="rahul" />
+
+    <ImageView
+        android:id="@+id/ivProfilePic"
+        android:layout_width="32dp"
+        android:layout_height="36dp"
+        android:src="@drawable/instagram_user_filled_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:color/black" />
 
     <ImageView
         android:id="@+id/ivImage"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:scaleType="centerCrop"
-        app:layout_constraintTop_toBottomOf="@id/tvHandle"
+        app:layout_constraintTop_toBottomOf="@id/ivProfilePic"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
     <TextView
         android:id="@+id/tvDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:text="TextView"
         app:layout_constraintTop_toBottomOf="@id/ivImage"
-        tools:text="hipster attempt"
-        android:layout_marginBottom="16dp"/>
+        tools:layout_editor_absoluteX="0dp"
+        tools:text="hipster attempt" />
+
+    <ImageView
+        android:id="@+id/iv3dots"
+        android:layout_width="12dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:rotation="90"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ufi_more" />
+
+    <ImageView
+        android:id="@+id/ivHeart"
+        android:layout_width="29dp"
+        android:layout_height="30dp"
+        app:layout_constraintBottom_toTopOf="@id/tvDescription"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivImage"
+        app:srcCompat="@drawable/ufi_heart" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:background="#3588EB"
+        android:background="#ff4e9f2e"
         android:cursorVisible="false"
         android:text="Sign Up"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -54,11 +54,13 @@
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="78dp"
+        android:layout_marginRight="78dp"
         android:layout_marginBottom="60dp"
         app:layout_constraintBottom_toTopOf="@id/etUsername"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/nav_logo_whiteout"
-        tools:layout_editor_absoluteX="78dp" />
+        app:srcCompat="@drawable/nav_logo_whiteout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
