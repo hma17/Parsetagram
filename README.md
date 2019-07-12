@@ -41,6 +41,7 @@ The following **additional** features are implemented:
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 
 1.How to get data from user and put it into the profile Activity
+
 2.Best way to move from activity to fragment on different activity.  
 
 ## Video Walkthrough
@@ -60,7 +61,7 @@ List an 3rd party libraries, icons, graphics, or other assets you used in your a
 
 ## Notes
 
-The biggest challenge was understanding the general movements between the fragments, activities, and adapters. While I worked on the app, this became easier to understand, however I always needed a constant reminder on how to do that buy looking at my previous movements. 
+The biggest challenge was understanding the general movements between the fragments, activities, and adapters. While I worked on the app, this became easier to understand, however I always needed a constant reminder on how to do that buy looking at my previous movements. Towards the end, I was trying to get the data for the user to show up on the profile, but I ran out of time. I will work on this because I think it is important for all app devolpment!
 
 ## License
 
